@@ -1,13 +1,17 @@
 package com.drnd.vluent;
 
+import com.drnd.vluent.model.Precondition;
 import com.drnd.vluent.model.ValidationConverter;
 import com.drnd.vluent.model.ValidationResult;
 import com.drnd.vluent.model.Validator;
-import com.drnd.vluent.model.Precondition;
 
 import java.util.Collection;
 import java.util.function.Supplier;
 
+/**
+ * The Entry point for creating validation chain. Adding validation steps does not invoke validation.
+ * The validation is invoked calling method validate and validateAndConvert
+ */
 public class Vluent {
 
     private final Chain chain;

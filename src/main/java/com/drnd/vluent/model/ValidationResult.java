@@ -3,30 +3,35 @@ package com.drnd.vluent.model;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The result of validation returned by {@link Validator}. It contains the invalidation messages
+ * if the case of non successful validation.
+ */
 public final class ValidationResult {
-    private List<String> validationMessages = new LinkedList<>();
+    private List<String> invalidationMessages = new LinkedList<>();
     public static ValidationResult SUCCESS = new ValidationResult();
 
     private void add(String message) {
-        validationMessages.add(message);
+        invalidationMessages.add(message);
     }
 
-    public static ValidationResult createError(String messageKey) {
+    /**
+     * It creates invalid validation result with concrete message
+     *
+     * @return non successful {@link ValidationResult} instance with {@param message}
+     */
+    public static ValidationResult createError(String message) {
         ValidationResult validationResult = new ValidationResult();
-        validationResult.add(messageKey);
+        validationResult.add(message);
         return validationResult;
     }
 
-    private void addAll(List<String> validationMessages) {
-        this.validationMessages.addAll(validationMessages);
-    }
-
     public boolean isSuccess() {
-        return validationMessages.isEmpty();
+        return invalidationMessages.isEmpty();
     }
 
-    public List<String> getValidationMessages() {
-        return validationMessages;
+    public List<String> getInvalidationMessages() {
+        return invalidationMessages;
     }
 
 }

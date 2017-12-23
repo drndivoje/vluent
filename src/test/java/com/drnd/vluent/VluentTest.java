@@ -31,7 +31,7 @@ public class VluentTest {
     public void shouldExecuteValidationWithPrecondition() {
         ValidationResult validationResult1 = Vluent.create().when(() -> true).then("AString", new EqualStringValidator("aSrtring")).validate();
         assertThat(validationResult1.isSuccess()).isFalse();
-        assertThat(validationResult1.getValidationMessages()).hasSize(1).contains("AString!=aSrtring");
+        assertThat(validationResult1.getInvalidationMessages()).hasSize(1).contains("AString!=aSrtring");
     }
 
     @Test
@@ -65,7 +65,7 @@ public class VluentTest {
     @Test
     public void shouldValidateCollectionOfValues() {
         ValidationResult booleanResult = Vluent.create().forEach(Arrays.asList("one", "one", "1"), new EqualStringValidator("one")).validate();
-        assertThat(booleanResult.getValidationMessages()).contains("1!=one");
+        assertThat(booleanResult.getInvalidationMessages()).contains("1!=one");
 
     }
 
