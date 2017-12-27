@@ -11,9 +11,6 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * author: drndivoje
- */
 public class VluentTest {
 
     @Test
@@ -67,6 +64,14 @@ public class VluentTest {
         ValidationResult booleanResult = Vluent.create().forEach(Arrays.asList("one", "one", "1"), new EqualStringValidator("one")).validate();
         assertThat(booleanResult.getInvalidationMessages()).contains("1!=one");
 
+    }
+
+    @Test
+    public void shouldValidateAnotatedField() {
+        User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
+
+        ValidationResult validationResult = Vluent.create().on(user).validate();
+        assertThat(validationResult.isSuccess()).isTrue();
     }
 
 }

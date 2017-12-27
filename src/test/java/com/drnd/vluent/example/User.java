@@ -1,5 +1,7 @@
 package com.drnd.vluent.example;
 
+import com.drnd.vluent.model.ValidateWith;
+
 import java.time.LocalDate;
 
 /**
@@ -7,6 +9,7 @@ import java.time.LocalDate;
  */
 public class User {
     private final String name;
+    @ValidateWith(value = OlderThen18Validator.class)
     private final LocalDate birthday;
     private final double salary;
 

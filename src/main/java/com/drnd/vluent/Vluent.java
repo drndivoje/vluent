@@ -5,8 +5,13 @@ import com.drnd.vluent.model.ValidationConverter;
 import com.drnd.vluent.model.ValidationResult;
 import com.drnd.vluent.model.Validator;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
+
+import static com.drnd.vluent.AnnotationResolution.resolveValidateWithAnnotation;
+
 
 /**
  * The Entry point for creating validation chain. Adding validation steps does not invoke validation.
@@ -28,6 +33,19 @@ public class Vluent {
         chain.add(toValidate, validator);
         return this;
     }
+
+    public <T> Vluent on(T toValidate) {
+        Field[] declaredFields = toValidate.getClass().getDeclaredFields();
+        for (Field field : declaredFields) {
+            List<Validator<T>> validators = resolveValidateWithAnnotation(field);
+            if (!validators.isEmpty()) {
+                T fieldValue = getFieldValue(field, toValidate);
+                chain.addAll(fieldValue, validators);
+            }
+        }
+        return this;
+    }
+
 
     public <T> Vluent on(Supplier<T> valueSupplier, Validator<T> validator) {
         chain.add(valueSupplier, validator);
@@ -82,6 +100,16 @@ public class Vluent {
                 sourceValidator.forEach(values, validator);
             }
             return this;
+        }
+
+    }
+
+    private static <T> T getFieldValue(Field field, Object root) {
+        field.setAccessible(true);
+        try {
+            return (T) field.get(root);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }

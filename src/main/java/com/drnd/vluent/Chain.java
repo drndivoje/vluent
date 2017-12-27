@@ -4,6 +4,7 @@ import com.drnd.vluent.model.Validator;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
 class Chain implements Iterable<Step> {
@@ -13,8 +14,14 @@ class Chain implements Iterable<Step> {
         this.chain = new LinkedList<>();
     }
 
-    public <T> void add(T value, Validator<T> validator) {
+    <T> void add(T value, Validator<T> validator) {
         chain.add(new Step<>(validator, () -> value));
+    }
+
+    <T> void addAll(T value, List<Validator<T>> validators) {
+        for(Validator<T> validator : validators) {
+            this.add(value, validator);
+        }
     }
 
     @Override
