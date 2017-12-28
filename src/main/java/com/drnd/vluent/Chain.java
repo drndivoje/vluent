@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 class Chain implements Iterable<Step> {
     private final LinkedList<Step> chain;
@@ -22,6 +24,10 @@ class Chain implements Iterable<Step> {
         for(Validator<T> validator : validators) {
             this.add(value, validator);
         }
+    }
+
+    Stream<Step> stream() {
+        return StreamSupport.stream(chain.spliterator(), false);
     }
 
     @Override

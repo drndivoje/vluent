@@ -8,9 +8,11 @@ import com.drnd.vluent.model.Validator;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.drnd.vluent.AnnotationResolution.resolveValidateWithAnnotation;
+import static com.drnd.vluent.model.ValidationResult.SUCCESS;
 
 
 /**
@@ -66,13 +68,10 @@ public class Vluent {
 
     public ValidationResult validate() {
 
-        for (Step step : chain) {
-            ValidationResult result = step.execute();
-            if (!result.isSuccess()) {
-                return result;
-            }
-        }
-        return ValidationResult.SUCCESS;
+        return chain.stream()
+                .map(Step::execute)
+                .filter(validationResult -> !validationResult.isSuccess())
+                .findFirst().orElse(SUCCESS);
     }
 
     public <T> T validateAndConvert(ValidationConverter<T> validationResultConverter) {
