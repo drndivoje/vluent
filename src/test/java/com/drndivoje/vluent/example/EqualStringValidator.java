@@ -1,9 +1,7 @@
-package com.drnd.vluent.example;
+package com.drndivoje.vluent.example;
 
-import com.drnd.vluent.model.ValidationResult;
-import com.drnd.vluent.model.Validator;
-
-import static com.drnd.vluent.model.ValidationResult.SUCCESS;
+import com.drndivoje.vluent.model.ValidationResult;
+import com.drndivoje.vluent.model.Validator;
 
 /**
  * author: drndivoje
@@ -18,7 +16,7 @@ public class EqualStringValidator implements Validator<String>{
 
     @Override
     public ValidationResult validate(String value) {
-        if(referentString.equals(value)) return SUCCESS;
+        if(referentString.equals(value)) return ValidationResult.SUCCESS;
         return ValidationResult.createError(value + "!=" + referentString);
     }
 }

@@ -1,7 +1,7 @@
-package com.drnd.vluent.example;
+package com.drndivoje.vluent.example;
 
-import com.drnd.vluent.model.ValidationResult;
-import com.drnd.vluent.model.Validator;
+import com.drndivoje.vluent.model.ValidationResult;
+import com.drndivoje.vluent.model.Validator;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

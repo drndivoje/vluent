@@ -1,6 +1,6 @@
-package com.drnd.vluent;
+package com.drndivoje.vluent;
 
-import com.drnd.vluent.model.Validator;
+import com.drndivoje.vluent.model.Validator;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,6 +9,9 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/**
+ * It holds all validation steps (as {@link Step}) configured calling API callis via {@link Vluent} class.
+ */
 class Chain implements Iterable<Step> {
     private final LinkedList<Step> chain;
 
@@ -21,7 +24,7 @@ class Chain implements Iterable<Step> {
     }
 
     <T> void addAll(T value, List<Validator<T>> validators) {
-        for(Validator<T> validator : validators) {
+        for (Validator<T> validator : validators) {
             this.add(value, validator);
         }
     }

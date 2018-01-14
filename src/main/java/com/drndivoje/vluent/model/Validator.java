@@ -1,4 +1,4 @@
-package com.drnd.vluent.model;
+package com.drndivoje.vluent.model;
 
 /**
  * Interface to implement validation on single value

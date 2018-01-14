@@ -1,7 +1,7 @@
-package com.drnd.vluent;
+package com.drndivoje.vluent;
 
-import com.drnd.vluent.model.ValidationResult;
-import com.drnd.vluent.model.Validator;
+import com.drndivoje.vluent.model.ValidationResult;
+import com.drndivoje.vluent.model.Validator;
 
 import java.util.function.Supplier;
 

@@ -1,18 +1,14 @@
-package com.drnd.vluent;
+package com.drndivoje.vluent;
 
-import com.drnd.vluent.model.Precondition;
-import com.drnd.vluent.model.ValidationConverter;
-import com.drnd.vluent.model.ValidationResult;
-import com.drnd.vluent.model.Validator;
+import com.drndivoje.vluent.model.Precondition;
+import com.drndivoje.vluent.model.ValidationConverter;
+import com.drndivoje.vluent.model.ValidationResult;
+import com.drndivoje.vluent.model.Validator;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
-
-import static com.drnd.vluent.AnnotationResolution.resolveValidateWithAnnotation;
-import static com.drnd.vluent.model.ValidationResult.SUCCESS;
 
 
 /**
@@ -39,7 +35,7 @@ public class Vluent {
     public <T> Vluent on(T toValidate) {
         Field[] declaredFields = toValidate.getClass().getDeclaredFields();
         for (Field field : declaredFields) {
-            List<Validator<T>> validators = resolveValidateWithAnnotation(field);
+            List<Validator<T>> validators = AnnotationResolution.resolveValidateWithAnnotation(field);
             if (!validators.isEmpty()) {
                 T fieldValue = getFieldValue(field, toValidate);
                 chain.addAll(fieldValue, validators);
@@ -71,7 +67,7 @@ public class Vluent {
         return chain.stream()
                 .map(Step::execute)
                 .filter(validationResult -> !validationResult.isSuccess())
-                .findFirst().orElse(SUCCESS);
+                .findFirst().orElse(ValidationResult.SUCCESS);
     }
 
     public <T> T validateAndConvert(ValidationConverter<T> validationResultConverter) {

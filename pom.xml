@@ -4,10 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.drnd</groupId>
+    <groupId>com.drndivoje</groupId>
     <artifactId>vluent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <description>Fluent Validation in Java</description>
+    <developers>
+        <developer>
+            <id>drndivoje</id>
+            <name>Ivan Doskovic</name>
+            <email>ivandoskovic@gmail.com</email>
+        </developer>
+    </developers>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

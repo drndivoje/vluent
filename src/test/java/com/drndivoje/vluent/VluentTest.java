@@ -1,9 +1,9 @@
-package com.drnd.vluent;
+package com.drndivoje.vluent;
 
-import com.drnd.vluent.example.EqualStringValidator;
-import com.drnd.vluent.example.OlderThen18Validator;
-import com.drnd.vluent.example.User;
-import com.drnd.vluent.model.ValidationResult;
+import com.drndivoje.vluent.example.EqualStringValidator;
+import com.drndivoje.vluent.example.OlderThen18Validator;
+import com.drndivoje.vluent.example.User;
+import com.drndivoje.vluent.model.ValidationResult;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;

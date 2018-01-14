@@ -1,6 +1,6 @@
-package com.drnd.vluent.example;
+package com.drndivoje.vluent.example;
 
-import com.drnd.vluent.model.ValidateWith;
+import com.drndivoje.vluent.model.ValidateWith;
 
 import java.time.LocalDate;
 

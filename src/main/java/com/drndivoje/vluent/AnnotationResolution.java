@@ -1,7 +1,7 @@
-package com.drnd.vluent;
+package com.drndivoje.vluent;
 
-import com.drnd.vluent.model.ValidateWith;
-import com.drnd.vluent.model.Validator;
+import com.drndivoje.vluent.model.ValidateWith;
+import com.drndivoje.vluent.model.Validator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
