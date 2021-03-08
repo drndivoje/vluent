@@ -1,6 +1,6 @@
 # Vluent
-
-Simple validation framework using fluent interface to define complex validation rules.
+Simple experimental validation framework (still POC) using fluent interface to define complex validation rules. Java Bean Validation (JSR 380) cannot offer right api to defined complex validation rules
+such as validation only if the certain condition is satisfied. The second reason is to avoid general overuse of annotations on POJO classes (think about Hibernate) and use more explicit way of defining validation rules.
 
 ## Usage
 
