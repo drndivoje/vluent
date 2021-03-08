@@ -1,10 +1,10 @@
 # Vluent
 
-Simple validation framework using fluent interface to define complex validation rules
+Simple validation framework using fluent interface to define complex validation rules.
 
 ## Usage
 
-Every custom validator should implement Validator interface and implement validate method which should return ValidatitionResult instance
+Every custom validator should implement _Validator_ interface and _validate_ method which should return ValidatitionResult instance
 
 ``` java
 public class UserNameValidator implements Validator<String>{
@@ -19,8 +19,7 @@ public class UserNameValidator implements Validator<String>{
 
 ValidationResult is class which contains information on validation error as String.
 ### Applying Validation
-The simplest use case is to validate the typical pojo
-if there is User class
+For example if you have a User class
 ``` java
 
 public class User {
@@ -37,7 +36,7 @@ ValidationResult validationResult = Vluent.create()
     .on(user.getSalary(), new SalaryValidator())
     .validate();
 ```
- The validators will apply sequentially. Taking the above example, it means if username is invalid the validation for salary will not be executed and Validation result will contains information on invalid username only
+The validators will apply sequentially. Taking the above example, it means if username is invalid the validation for salary will not be executed and Validation result will contain only information on an invalid username.
 
 ### Validation Preconditions
 
@@ -51,4 +50,4 @@ ValidationResult validationResult = Vluent.create()
     .then(user.getSalary(), new SalaryValidator())
     .validate();
 ```
-In this case SalaryValidator will be invoke oly for salaries greater then 1000
+In this case SalaryValidator will be invoked only for salaries greater then 1000

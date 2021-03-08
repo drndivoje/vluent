@@ -27,11 +27,27 @@ public class Vluent {
         return new Vluent();
     }
 
+    /**
+     * Apply a validator to entity of type T. This method does not execute validation. It adds the validator to internal validation chain.
+     *
+     * @param toValidate entity to validate
+     * @param validator  an instance of {@link Validator}
+     * @param <T>        type of the entity to validate
+     * @return the instance of {@link Vluent} with updated validation chain.
+     */
     public <T> Vluent on(T toValidate, Validator<T> validator) {
         chain.add(toValidate, validator);
         return this;
     }
 
+    /**
+     * Apply all validators defined inside the entity to validate using annotation {@link com.drndivoje.vluent.model.ValidateWith}.
+     * This method does not execute validation. It adds the validator to internal validation chain.
+     *
+     * @param toValidate entity to validate
+     * @param <T>        type of the entity to validate
+     * @return the instance of {@link Vluent} with updated validation chain.
+     */
     public <T> Vluent on(T toValidate) {
         Field[] declaredFields = toValidate.getClass().getDeclaredFields();
         for (Field field : declaredFields) {

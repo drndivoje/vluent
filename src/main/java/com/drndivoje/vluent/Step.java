@@ -6,7 +6,7 @@ import com.drndivoje.vluent.model.Validator;
 import java.util.function.Supplier;
 
 /**
- * Single validation step in validation chain. It executes validation on related value using related validator
+ * Single validation step in validation chain. It executes validation on the value using correlated validator
  *
  * @param <T> type of value to validate
  */
