@@ -1,4 +1,4 @@
-package com.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.model;
 
 /**
  * It converts {@link ValidationResult} desirable type T defined by caller.

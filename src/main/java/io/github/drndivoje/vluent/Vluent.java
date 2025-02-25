@@ -1,9 +1,6 @@
-package com.drndivoje.vluent;
+package io.github.drndivoje.vluent;
 
-import com.drndivoje.vluent.model.Precondition;
-import com.drndivoje.vluent.model.ValidationConverter;
-import com.drndivoje.vluent.model.ValidationResult;
-import com.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.model.*;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -41,7 +38,7 @@ public class Vluent {
     }
 
     /**
-     * Apply all validators defined inside the entity to validate using annotation {@link com.drndivoje.vluent.model.ValidateWith}.
+     * Apply all validators defined inside the entity to validate using annotation {@link ValidateWith}.
      * This method does not execute validation. It adds the validator to internal validation chain.
      *
      * @param toValidate entity to validate

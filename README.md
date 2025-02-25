@@ -1,6 +1,6 @@
-# Vluent
-Simple experimental validation framework (still POC) using fluent interface to define complex validation rules. Java Bean Validation (JSR 380) cannot offer right api to defined complex validation rules
-such as validation only if the certain condition is satisfied. The second reason is to avoid general overuse of annotations on POJO classes (think about Hibernate) and use more explicit way of defining validation rules.
+_# Vluent
+
+Simple validation library for Java with zero dependencies. It provides easier way to implement complex validation rules by making it composable and easy to test.
 
 ## Usage
 
@@ -50,4 +50,4 @@ ValidationResult validationResult = Vluent.create()
     .then(user.getSalary(), new SalaryValidator())
     .validate();
 ```
-In this case SalaryValidator will be invoked only for salaries greater then 1000
+In this case SalaryValidator will be invoked only for salaries greater then 1000. Unit testing each rules is easy as they are independent of each other.

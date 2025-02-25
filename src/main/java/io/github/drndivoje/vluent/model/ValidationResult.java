@@ -1,4 +1,4 @@
-package com.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.model;
 
 import java.util.LinkedList;
 import java.util.List;

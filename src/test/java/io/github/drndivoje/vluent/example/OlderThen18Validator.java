@@ -1,7 +1,7 @@
-package com.drndivoje.vluent.example;
+package io.github.drndivoje.vluent.example;
 
-import com.drndivoje.vluent.model.ValidationResult;
-import com.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.model.ValidationResult;
+import io.github.drndivoje.vluent.model.Validator;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

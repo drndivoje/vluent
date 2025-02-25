@@ -1,4 +1,4 @@
-package com.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.model;
 
 /**
  * Interface to implement validation on single value

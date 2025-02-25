@@ -1,7 +1,7 @@
-package com.drndivoje.vluent;
+package io.github.drndivoje.vluent;
 
-import com.drndivoje.vluent.model.ValidationResult;
-import com.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.model.ValidationResult;
+import io.github.drndivoje.vluent.model.Validator;
 
 import java.util.function.Supplier;
 

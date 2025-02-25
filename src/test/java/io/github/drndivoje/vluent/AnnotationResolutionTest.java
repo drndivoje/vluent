@@ -1,8 +1,8 @@
-package com.drndivoje.vluent;
+package io.github.drndivoje.vluent;
 
-import com.drndivoje.vluent.example.OlderThen18Validator;
-import com.drndivoje.vluent.example.User;
-import com.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.example.OlderThen18Validator;
+import io.github.drndivoje.vluent.example.User;
+import io.github.drndivoje.vluent.model.Validator;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;

@@ -1,10 +1,12 @@
-package com.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.model;
+
+import io.github.drndivoje.vluent.Vluent;
 
 import java.util.function.Supplier;
 
 /**
  * Used to make precondition before executing validation.
- * It is added to validation chain using {@link com.drndivoje.vluent.Vluent} when method
+ * It is added to validation chain using {@link Vluent} when method
  */
 public interface Precondition extends Supplier<Boolean> {
     /**

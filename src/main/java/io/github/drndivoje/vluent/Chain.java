@@ -1,6 +1,6 @@
-package com.drndivoje.vluent;
+package io.github.drndivoje.vluent;
 
-import com.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.model.Validator;
 
 import java.util.Iterator;
 import java.util.LinkedList;

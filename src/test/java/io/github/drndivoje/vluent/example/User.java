@@ -1,6 +1,6 @@
-package com.drndivoje.vluent.example;
+package io.github.drndivoje.vluent.example;
 
-import com.drndivoje.vluent.model.ValidateWith;
+import io.github.drndivoje.vluent.model.ValidateWith;
 
 import java.time.LocalDate;
 

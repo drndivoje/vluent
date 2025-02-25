@@ -1,9 +1,9 @@
-package com.drndivoje.vluent;
+package io.github.drndivoje.vluent;
 
-import com.drndivoje.vluent.example.EqualStringValidator;
-import com.drndivoje.vluent.example.OlderThen18Validator;
-import com.drndivoje.vluent.example.User;
-import com.drndivoje.vluent.model.ValidationResult;
+import io.github.drndivoje.vluent.example.EqualStringValidator;
+import io.github.drndivoje.vluent.example.OlderThen18Validator;
+import io.github.drndivoje.vluent.example.User;
+import io.github.drndivoje.vluent.model.ValidationResult;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
