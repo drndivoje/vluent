@@ -18,7 +18,7 @@ public class AnnotationResolutionTest {
         User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
         Field[] declaredFields = user.getClass().getDeclaredFields();
         List<Validator<Object>> validators = AnnotationResolution.resolveValidateWithAnnotation(declaredFields[0]);
-        assertThat(validators.isEmpty());
+        assertThat(validators.isEmpty()).isTrue();
     }
 
     @Test

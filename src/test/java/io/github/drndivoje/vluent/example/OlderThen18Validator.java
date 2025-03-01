@@ -6,9 +6,6 @@ import io.github.drndivoje.vluent.model.Validator;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-/**
- * author: drndivoje
- */
 public class OlderThen18Validator implements Validator<LocalDate> {
     @Override
     public ValidationResult validate(LocalDate value) {

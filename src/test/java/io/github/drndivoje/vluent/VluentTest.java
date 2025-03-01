@@ -67,7 +67,7 @@ public class VluentTest {
     }
 
     @Test
-    public void shouldValidateAnotatedField() {
+    public void shouldValidateAnnotatedField() {
         User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
 
         ValidationResult validationResult = Vluent.create().on(user).validate();

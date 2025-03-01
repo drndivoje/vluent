@@ -7,5 +7,10 @@ package io.github.drndivoje.vluent.model;
  */
 public interface ValidationConverter<T> {
 
+    /**
+     * It converts {@link ValidationResult} to desirable type T.
+     * @param result
+     * @return
+     */
     T convert(ValidationResult result);
 }

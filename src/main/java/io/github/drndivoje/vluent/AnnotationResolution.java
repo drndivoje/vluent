@@ -30,7 +30,7 @@ class AnnotationResolution {
 
     private static <T> Validator<T> createValidatorInstance(Class<? extends Validator> validatorClass) {
         Constructor<?>[] constructors = validatorClass.getConstructors();
-        for (Constructor constructor : constructors) {
+        for (Constructor<?> constructor : constructors) {
             if (constructor.getParameterCount() == 0) {
                 try {
                     return (Validator<T>) constructor.newInstance();

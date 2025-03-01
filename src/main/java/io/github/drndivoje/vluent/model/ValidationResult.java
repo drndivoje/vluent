@@ -5,10 +5,13 @@ import java.util.List;
 
 /**
  * The result of validation returned by {@link Validator}. It contains the invalidation messages
- * if the case of non successful validation.
+ * if the case of failed validation.
  */
 public final class ValidationResult {
-    private List<String> invalidationMessages = new LinkedList<>();
+    private final List<String> invalidationMessages = new LinkedList<>();
+    /**
+     * The successful validation result
+     */
     public static ValidationResult SUCCESS = new ValidationResult();
 
     private void add(String message) {
@@ -18,7 +21,7 @@ public final class ValidationResult {
     /**
      * It creates invalid validation result with concrete message
      *
-     * @return non successful {@link ValidationResult} instance with {@param message}
+     * @return non-successful/failed {@link ValidationResult} instance with {@param message}
      */
     public static ValidationResult createError(String message) {
         ValidationResult validationResult = new ValidationResult();
@@ -26,10 +29,20 @@ public final class ValidationResult {
         return validationResult;
     }
 
+    /**
+     * It checks it the result is successful
+     *
+     * @return true if the validation is successful
+     */
     public boolean isSuccess() {
         return invalidationMessages.isEmpty();
     }
 
+    /**
+     * It returns the invalidation messages
+     *
+     * @return list of invalidation messages
+     */
     public List<String> getInvalidationMessages() {
         return invalidationMessages;
     }

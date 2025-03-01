@@ -57,15 +57,28 @@ public class Vluent {
         return this;
     }
 
-
+    /**
+     * Apply a validator to value provided by {@param valueSupplier}. This method does not execute validation. It adds the validator to internal validation chain.
+     *
+     * @param valueSupplier the supplier of the value to validate
+     * @param validator     an instance of {@link Validator}
+     * @param <T>           the type of the value to validate
+     * @return the instance of {@link Vluent} with updated validation chain.
+     */
     public <T> Vluent on(Supplier<T> valueSupplier, Validator<T> validator) {
         chain.add(valueSupplier, validator);
         return this;
     }
 
 
-    public ValidatorWithPrecondition when(Precondition condition) {
-        return new ValidatorWithPrecondition(condition, this);
+    /**
+     * Apply the precondition to the validation chain. If the precondition is met, the validation is executed.
+     *
+     * @param precondition the precondition
+     * @return the instance of {@link ValidatorWithPrecondition}
+     */
+    public ValidatorWithPrecondition when(Precondition precondition) {
+        return new ValidatorWithPrecondition(precondition, this);
     }
 
     public <T> Vluent forEach(Collection<T> values, Validator<T> validator) {
@@ -75,6 +88,11 @@ public class Vluent {
         return this;
     }
 
+    /**
+     * It validates the chain and returns the result
+     *
+     * @return the result of validation
+     */
     public ValidationResult validate() {
 
         return chain.stream()
@@ -83,12 +101,19 @@ public class Vluent {
                 .findFirst().orElse(ValidationResult.SUCCESS);
     }
 
+    /**
+     * It validates the chain and converts the result to the desired type using {@link ValidationConverter}
+     *
+     * @param validationResultConverter the converter
+     * @param <T>                       the type of the result
+     * @return the converted result
+     */
     public <T> T validateAndConvert(ValidationConverter<T> validationResultConverter) {
         return validationResultConverter.convert(this.validate());
     }
 
     public static class ValidatorWithPrecondition {
-        private Precondition precondition;
+        private final Precondition precondition;
         private final Vluent sourceValidator;
 
         private ValidatorWithPrecondition(Precondition precondition, Vluent sourceValidator) {

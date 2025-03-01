@@ -4,9 +4,6 @@ import io.github.drndivoje.vluent.model.ValidateWith;
 
 import java.time.LocalDate;
 
-/**
- * author: drndivoje
- */
 public class User {
     private final String name;
     @ValidateWith(value = OlderThen18Validator.class)

@@ -122,7 +122,6 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.2.7</version>
                         <configuration>
-                            <!-- Optional: specify which key to use -->
                             <keyname>${gpg.keyname}</keyname>
                             <!-- Prevent gpg from using pinentry programs -->
                             <gpgArguments>
