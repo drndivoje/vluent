@@ -1,10 +1,8 @@
-_# Vluent
+# Vluent
 
 Simple validation library for Java with zero dependencies. It provides easier way to implement complex validation rules
 by making it composable and easy to test.
 It can be used for any tier of your application, and it is not tied to any specific framework.
-The Vluent is not compatible with the Java Bean Validation Specification, and it follows similar approach like Spring
-Validator interface.
 
 ## Usage
 Add dependency to your project
