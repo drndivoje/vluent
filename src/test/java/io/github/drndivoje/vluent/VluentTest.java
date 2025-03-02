@@ -5,6 +5,7 @@ import io.github.drndivoje.vluent.example.OlderThen18Validator;
 import io.github.drndivoje.vluent.example.User;
 import io.github.drndivoje.vluent.model.Precondition;
 import io.github.drndivoje.vluent.model.ValidationResult;
+import io.github.drndivoje.vluent.model.Validator;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -35,15 +36,22 @@ public class VluentTest {
     @Test
     public void shouldValidateWithComplexPreconditions() {
         User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
-        //validate that only users born before and named Bob must have salary greater then 2000
+        //validate that only users born before 1970 and named Bob must have salary greater then 2000
         Precondition agePrecondition = () -> user.birthday().isBefore(LocalDate.of(1970, 1, 1));
         Precondition namePrecondition = () -> user.name().equals("Bob");
+        Validator<Double> salaryValidator = (value) -> {
+            if (value > 2000) return ValidationResult.SUCCESS;
+            return ValidationResult.createError("not enough money");
+        };
         ValidationResult validationResult = Vluent.create().when(agePrecondition.and(namePrecondition))
-                .then(user.salary(), (value) -> {
-                    if (value > 2000) return ValidationResult.SUCCESS;
-                    return ValidationResult.createError("not enough money");
-                }).validate();
+                .then(user.salary(), salaryValidator).validate();
         assertThat(validationResult.isSuccess()).isTrue();
+       //validate that only users born after 1970 or named Bob must not have salary greater then 2000
+        ValidationResult validationResult2 = Vluent.create()
+                .when(agePrecondition.not().or(namePrecondition))
+                .then(user.salary(), salaryValidator.invert()).validate();
+        assertThat(validationResult2.isSuccess()).isTrue();
+
     }
 
     @Test

@@ -13,6 +13,9 @@ public final class ValidationResult {
     ValidationResult() {
         this.invalidationMessages = new LinkedList<>();
     }
+    ValidationResult(ValidationResult validationResult) {
+        this.invalidationMessages = new LinkedList<>(validationResult.invalidationMessages);
+    }
 
     /**
      * The successful validation result
