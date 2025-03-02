@@ -7,7 +7,15 @@ The Vluent is not compatible with the Java Bean Validation Specification, and it
 Validator interface.
 
 ## Usage
+Add dependency to your project
 
+``` xml
+<dependency>
+    <groupId>com.github.drndivoje</groupId>
+    <artifactId>vluent</artifactId>
+    <version>0.0.2</version>
+</dependency>
+```
 Every custom validator should implement _Validator_ interface and _validate_ method which should return
 ValidatitionResult instance
 
