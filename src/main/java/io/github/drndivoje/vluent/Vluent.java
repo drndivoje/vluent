@@ -12,7 +12,7 @@ import java.util.function.Supplier;
  * The Entry point for creating validation chain. Adding validation steps does not invoke validation.
  * The validation is invoked calling method validate and validateAndConvert
  */
-public class Vluent {
+public final class Vluent {
 
     private final Chain chain;
 
@@ -20,6 +20,11 @@ public class Vluent {
         this.chain = new Chain();
     }
 
+    /**
+     * Create a new instance of {@link Vluent}
+     *
+     * @return the instance of {@link Vluent}
+     */
     public static Vluent create() {
         return new Vluent();
     }
@@ -75,12 +80,20 @@ public class Vluent {
      * Apply the precondition to the validation chain. If the precondition is met, the validation is executed.
      *
      * @param precondition the precondition
-     * @return the instance of {@link ValidatorWithPrecondition}
+     * @return the instance of {@link PreconditionValidation}
      */
-    public ValidatorWithPrecondition when(Precondition precondition) {
-        return new ValidatorWithPrecondition(precondition, this);
+    public PreconditionValidation when(Precondition precondition) {
+        return new PreconditionValidation(precondition, this);
     }
 
+    /**
+     * Apply the validator to each value in the collection. This method does not execute validation. It adds the validator to internal validation chain.
+     *
+     * @param values    the collection of values to validate
+     * @param validator an instance of {@link Validator}
+     * @param <T>       the type of the value to validate
+     * @return the instance of {@link Vluent} with updated validation chain.
+     */
     public <T> Vluent forEach(Collection<T> values, Validator<T> validator) {
         for (T value : values) {
             chain.add(value, validator);
@@ -112,15 +125,27 @@ public class Vluent {
         return validationResultConverter.convert(this.validate());
     }
 
-    public static class ValidatorWithPrecondition {
+    /**
+     * The class to define precondition for validation
+     */
+    public final static class PreconditionValidation {
         private final Precondition precondition;
         private final Vluent sourceValidator;
 
-        private ValidatorWithPrecondition(Precondition precondition, Vluent sourceValidator) {
+        private PreconditionValidation(Precondition precondition, Vluent sourceValidator) {
             this.precondition = precondition;
             this.sourceValidator = sourceValidator;
         }
 
+        /**
+         * Apply a validator to entity of type T if precondition is satisfied.
+         * This method does not execute validation. It adds the validator to internal validation chain.
+         *
+         * @param toValidate entity to validate
+         * @param validator  an instance of {@link Validator}
+         * @param <T>        type of the entity to validate
+         * @return instance of {@link Vluent} with updated  validation chain.
+         */
         public <T> Vluent then(T toValidate, Validator<T> validator) {
             if (precondition.get()) {
                 sourceValidator.on(toValidate, validator);
@@ -128,7 +153,15 @@ public class Vluent {
             return sourceValidator;
         }
 
-        public <T> ValidatorWithPrecondition thenForEach(Collection<T> values, Validator<T> validator) {
+        /**
+         * Apply validator to each value in the collection if precondition is satisfied.
+         *
+         * @param values    the collection of values to validate
+         * @param validator instance of {@link Validator}
+         * @param <T>       type of the entity to validate
+         * @return instance of {@link Vluent} with updated  validation chain.
+         */
+        public <T> PreconditionValidation thenForEach(Collection<T> values, Validator<T> validator) {
             if (precondition.get()) {
                 sourceValidator.forEach(values, validator);
             }

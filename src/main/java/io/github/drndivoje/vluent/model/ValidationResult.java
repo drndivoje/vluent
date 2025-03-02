@@ -8,7 +8,12 @@ import java.util.List;
  * if the case of failed validation.
  */
 public final class ValidationResult {
-    private final List<String> invalidationMessages = new LinkedList<>();
+    private final List<String> invalidationMessages;
+
+    ValidationResult() {
+        this.invalidationMessages = new LinkedList<>();
+    }
+
     /**
      * The successful validation result
      */
@@ -21,6 +26,7 @@ public final class ValidationResult {
     /**
      * It creates invalid validation result with concrete message
      *
+     * @param message message to add to the invalidation messages
      * @return non-successful/failed {@link ValidationResult} instance with {@param message}
      */
     public static ValidationResult createError(String message) {

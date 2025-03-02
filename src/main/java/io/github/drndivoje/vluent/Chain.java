@@ -12,8 +12,8 @@ import java.util.stream.StreamSupport;
 /**
  * It holds all validation steps (as {@link Step}) configured calling API callis via {@link Vluent} class.
  */
-class Chain implements Iterable<Step> {
-    private final LinkedList<Step> chain;
+class Chain implements Iterable<Step<?>> {
+    private final LinkedList<Step<?>> chain;
 
     Chain() {
         this.chain = new LinkedList<>();
@@ -29,20 +29,16 @@ class Chain implements Iterable<Step> {
         }
     }
 
-    Stream<Step> stream() {
-        return StreamSupport.stream(chain.spliterator(), false);
+    Stream<Step<?>> stream() {
+        return chain.stream();
     }
 
     @Override
-    public Iterator<Step> iterator() {
+    public Iterator<Step<?>> iterator() {
         return chain.iterator();
     }
 
     public <T> void add(Supplier<T> valueSupplier, Validator<T> validator) {
         chain.add(new Step<>(validator, valueSupplier));
-    }
-
-    public void add(Step last) {
-        chain.add(last);
     }
 }

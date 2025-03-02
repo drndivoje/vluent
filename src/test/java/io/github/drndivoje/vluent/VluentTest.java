@@ -3,6 +3,7 @@ package io.github.drndivoje.vluent;
 import io.github.drndivoje.vluent.example.EqualStringValidator;
 import io.github.drndivoje.vluent.example.OlderThen18Validator;
 import io.github.drndivoje.vluent.example.User;
+import io.github.drndivoje.vluent.model.Precondition;
 import io.github.drndivoje.vluent.model.ValidationResult;
 import org.testng.annotations.Test;
 
@@ -32,6 +33,20 @@ public class VluentTest {
     }
 
     @Test
+    public void shouldValidateWithComplexPreconditions() {
+        User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
+        //validate that only users born before and named Bob must have salary greater then 2000
+        Precondition agePrecondition = () -> user.birthday().isBefore(LocalDate.of(1970, 1, 1));
+        Precondition namePrecondition = () -> user.name().equals("Bob");
+        ValidationResult validationResult = Vluent.create().when(agePrecondition.and(namePrecondition))
+                .then(user.salary(), (value) -> {
+                    if (value > 2000) return ValidationResult.SUCCESS;
+                    return ValidationResult.createError("not enough money");
+                }).validate();
+        assertThat(validationResult.isSuccess()).isTrue();
+    }
+
+    @Test
     public void shouldNotExecuteValidationWithPrecondition() {
         ValidationResult validationResult1 = Vluent.create().when(() -> false).then("AString", new EqualStringValidator("aSrtring")).validate();
         assertThat(validationResult1.isSuccess()).isTrue();
@@ -40,9 +55,9 @@ public class VluentTest {
     @Test
     public void shouldValidateSimpleValidationChain() {
         User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
-        ValidationResult validationResult = Vluent.create().on(user.getName(), new EqualStringValidator("Bob"))
-                .on(user.getBirthday(), new OlderThen18Validator())
-                .on(user.getSalary(), (value) -> {
+        ValidationResult validationResult = Vluent.create().on(user.name(), new EqualStringValidator("Bob"))
+                .on(user.birthday(), new OlderThen18Validator())
+                .on(user.salary(), (value) -> {
                     if (value > 2000) return ValidationResult.SUCCESS;
                     return ValidationResult.createError("poor");
                 }).validate();

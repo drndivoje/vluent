@@ -47,12 +47,14 @@ ValidationResult validationResult = Vluent.create()
     .validate();
 ```
 
-The validators will apply sequentially. Taking the above example, it means if username is invalid the validation for
-salary will not be executed and Validation result will contain only information on an invalid username.
+The validators will apply sequentially. In the above example, if the username is invalid, the validation for the salary
+will not be executed, and the validation result will contain only information about the invalid username.
 
-### Validation Preconditions
+### Validation with Preconditions
 
-In cases of complex validation rules, preconditions could be defined before applying validator
+In cases of complex validation rules, preconditions could be defined before applying validator. Each precondition should
+implement
+Precondition interface.
 
 ``` java
 

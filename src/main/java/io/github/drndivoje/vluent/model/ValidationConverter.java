@@ -9,8 +9,8 @@ public interface ValidationConverter<T> {
 
     /**
      * It converts {@link ValidationResult} to desirable type T.
-     * @param result
-     * @return
+     * @param result the result of validation
+     * @return the converted result
      */
     T convert(ValidationResult result);
 }
