@@ -1,44 +1,44 @@
 package io.github.drndivoje.vluent;
 
 import io.github.drndivoje.vluent.model.Validator;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
- * It holds all validation steps (as {@link Step}) configured calling API callis via {@link Vluent} class.
+ * It holds all validation steps (as {@link Step}) configured calling API callis via {@link Vluent}
+ * class.
  */
 class Chain implements Iterable<Step<?>> {
-    private final LinkedList<Step<?>> chain;
 
-    Chain() {
-        this.chain = new LinkedList<>();
-    }
+  private final LinkedList<Step<?>> chain;
 
-    <T> void add(T value, Validator<T> validator) {
-        chain.add(new Step<>(validator, () -> value));
-    }
+  Chain() {
+    this.chain = new LinkedList<>();
+  }
 
-    <T> void addAll(T value, List<Validator<T>> validators) {
-        for (Validator<T> validator : validators) {
-            this.add(value, validator);
-        }
-    }
+  <T> void add(T value, Validator<T> validator) {
+    chain.add(new Step<>(validator, () -> value));
+  }
 
-    Stream<Step<?>> stream() {
-        return chain.stream();
+  <T> void addAll(T value, List<Validator<T>> validators) {
+    for (Validator<T> validator : validators) {
+      this.add(value, validator);
     }
+  }
 
-    @Override
-    public Iterator<Step<?>> iterator() {
-        return chain.iterator();
-    }
+  Stream<Step<?>> stream() {
+    return chain.stream();
+  }
 
-    public <T> void add(Supplier<T> valueSupplier, Validator<T> validator) {
-        chain.add(new Step<>(validator, valueSupplier));
-    }
+  @Override
+  public Iterator<Step<?>> iterator() {
+    return chain.iterator();
+  }
+
+  public <T> void add(Supplier<T> valueSupplier, Validator<T> validator) {
+    chain.add(new Step<>(validator, valueSupplier));
+  }
 }
