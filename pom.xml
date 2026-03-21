@@ -6,7 +6,7 @@
 
   <groupId>io.github.drndivoje</groupId>
   <artifactId>vluent</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5-SNAPSHOT</version>
 
   <name>Vluent Simple Validation Library</name>
   <description>Fluent Validation in Java</description>
