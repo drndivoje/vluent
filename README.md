@@ -4,9 +4,8 @@ Simple validation library for Java with zero dependencies. It provides easier wa
 complex validation rules
 by making it composable and easy to test.
 It can be used for any tier of your application, and it is not tied to any specific framework.
-The Vluent is not compatible with the Java Bean Validation Specification, and it follows similar
-approach like Spring
-Validator interface.
+Vluent is compatible with the Java Bean Validation Specification and can be used both as a standalone
+validation library and as part of standard Bean Validation frameworks like Hibernate Validator.
 
 ## Usage
 
@@ -16,9 +15,21 @@ Add dependency to your project
 <dependency>
     <groupId>com.github.drndivoje</groupId>
     <artifactId>vluent</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.4</version>
 </dependency>
 ```
+
+For Bean Validation integration with Hibernate Validator, also add:
+
+``` xml
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator</artifactId>
+    <version>9.1.0.Final</version>
+</dependency>
+```
+
+## Standalone Usage
 
 Every custom validator should implement _Validator_ interface and _validate_ method which should
 return
@@ -119,4 +130,73 @@ ValidationResult validationResult = Vluent.create()
  .when(agePrecondition.not().or(namePrecondition))
  .then(user.salary(), salaryValidator.invert())
  .validate();
+```
+
+## Bean Validation Integration
+
+Vluent can be seamlessly integrated with the Java Bean Validation specification (Jakarta Validation)
+and used with Hibernate Validator. This allows you to use your Vluent validators as part of the 
+standard Bean Validation framework.
+
+### Using @ValidateBeanWith Annotation
+
+You can annotate your beans with `@ValidateBeanWith` to apply Vluent validators as constraint validators:
+
+``` java
+@ValidateBeanWith(UserValidator.class)
+public record User(
+    @NotBlank String name,
+    LocalDate birthDate,
+    double salary) {}
+```
+
+Your Vluent validator remains the same, implementing the standard Vluent `Validator` interface:
+
+``` java
+public class UserValidator implements Validator<User> {
+
+  @Override
+  public ValidationResult validate(User value) {
+    LocalDate now = LocalDate.now();
+    LocalDate birthDate = value.birthDate();
+    long between = ChronoUnit.YEARS.between(birthDate, now);
+    if (between >= 18) {
+      return ValidationResult.SUCCESS;
+    } else {
+      return ValidationResult.createError("too young");
+    }
+  }
+}
+```
+
+### Benefits of Dual Mode Support
+
+- **Flexibility**: Use the same validators in both standalone Vluent API calls and as part of Bean Validation
+- **Framework Integration**: Seamlessly integrate with Spring Boot validation, JAX-RS validation, and other frameworks that support Bean Validation
+- **Mix and Match**: Combine Vluent validators with standard Bean Validation constraints like `@NotBlank`, `@Size`, etc.
+- **No Additional Code**: Your existing Vluent validators work with Bean Validation without modification
+
+### Example with Spring Boot
+
+In a Spring Boot REST controller, Bean Validation with Vluent validators works automatically:
+
+``` java
+@RestController
+public class UserController {
+
+  @PostMapping("/users")
+  public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+    // If validation fails, Spring Boot automatically returns 400 Bad Request
+    return ResponseEntity.ok(user);
+  }
+}
+```
+
+The same `UserValidator` can also be used explicitly with the Vluent API:
+
+``` java
+ValidationResult result = new UserValidator().validate(user);
+if (!result.isSuccess()) {
+  // Handle validation error
+}
 ```

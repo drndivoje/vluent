@@ -41,9 +41,7 @@
         <dependency>
             <groupId>io.github.drndivoje</groupId>
             <artifactId>vluent</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/vluent-0.0.3-SNAPSHOT.jar</systemPath>
+            <version>0.0.4</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
