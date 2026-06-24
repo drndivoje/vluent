@@ -9,8 +9,18 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Jakarta Bean Validation constraint validator implementation for {@link ValidateBeanWith}
+ * annotation.
+ *
+ * <p>This validator executes all configured Vluent validators and returns success only if all of
+ * them pass validation.
+ */
 public class VluentJakartaBeanValidator implements ConstraintValidator<ValidateBeanWith, Object> {
   private List<Validator<Object>> validators;
+
+  /** Default constructor. */
+  public VluentJakartaBeanValidator() {}
 
   @Override
   public void initialize(ValidateBeanWith constraintAnnotation) {

@@ -4,7 +4,20 @@ import io.github.drndivoje.vluent.model.Validator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/** Utility class */
 public final class Util {
+
+  private Util() {
+    // do nothing
+  }
+
+  /**
+   * Creates a validator instance using its no-argument constructor.
+   *
+   * @param validatorClass validator implementation class
+   * @param <T> validator value type
+   * @return a new validator instance
+   */
   public static <T> Validator<T> createValidatorInstance(
       Class<? extends Validator> validatorClass) {
     Constructor<?>[] constructors = validatorClass.getConstructors();
