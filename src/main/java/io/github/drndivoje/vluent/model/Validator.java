@@ -25,7 +25,7 @@ public interface Validator<T> {
     return value -> {
       ValidationResult result = validate(value);
       if (result.isSuccess()) {
-        return new ValidationResult(result);
+        return ValidationResult.createError("Inverted validation failed for value: " + value);
       } else {
         return ValidationResult.SUCCESS;
       }

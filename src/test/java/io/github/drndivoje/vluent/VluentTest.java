@@ -64,7 +64,10 @@ public class VluentTest {
             .when(agePrecondition.not().or(namePrecondition))
             .then(user.salary(), salaryValidator.invert())
             .validate();
-    assertThat(validationResult2.isSuccess()).isTrue();
+    assertThat(validationResult2.isSuccess()).isFalse();
+    assertThat(validationResult2.getInvalidationMessages()).hasSize(1);
+    assertThat(validationResult2.getInvalidationMessages())
+        .contains("Inverted validation failed for value: 2303.3");
   }
 
   @Test
