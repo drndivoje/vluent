@@ -6,6 +6,7 @@ import io.github.drndivoje.vluent.example.EqualStringValidator;
 import io.github.drndivoje.vluent.example.OlderThen18Validator;
 import io.github.drndivoje.vluent.example.User;
 import io.github.drndivoje.vluent.model.Precondition;
+import io.github.drndivoje.vluent.model.ValidateWith;
 import io.github.drndivoje.vluent.model.ValidationResult;
 import io.github.drndivoje.vluent.model.Validator;
 import java.time.LocalDate;
@@ -41,7 +42,7 @@ public class VluentTest {
 
   @Test
   public void shouldValidateWithComplexPreconditions() {
-    User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
+    User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3, "Street");
     // validate that only users born before 1970 and named Bob must have salary greater then 2000
     Precondition agePrecondition = () -> user.birthday().isBefore(LocalDate.of(1970, 1, 1));
     Precondition namePrecondition = () -> user.name().equals("Bob");
@@ -82,7 +83,7 @@ public class VluentTest {
 
   @Test
   public void shouldValidateSimpleValidationChain() {
-    User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
+    User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3, "Street");
     ValidationResult validationResult =
         Vluent.create()
             .on(user.name(), new EqualStringValidator("Bob"))
@@ -120,9 +121,12 @@ public class VluentTest {
 
   @Test
   public void shouldValidateAnnotatedField() {
-    User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3);
+    ValidUser user = new ValidUser("Bob", LocalDate.of(1960, 3, 3));
 
     ValidationResult validationResult = Vluent.create().on(user).validate();
     assertThat(validationResult.isSuccess()).isTrue();
   }
+
+  public record ValidUser(
+      String name, @ValidateWith(value = OlderThen18Validator.class) LocalDate birthday) {}
 }

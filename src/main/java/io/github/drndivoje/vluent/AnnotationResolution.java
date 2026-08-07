@@ -38,7 +38,7 @@ class AnnotationResolution {
               "Cannon create validator instance from " + validatorClass.getCanonicalName(), e);
         } catch (IllegalAccessException e) {
           throw new IllegalStateException(
-              "Cannon access constructor of  validator class " + validatorClass.getCanonicalName(),
+              "Cannon access constructor of validator class " + validatorClass.getCanonicalName(),
               e);
         } catch (InvocationTargetException e) {
           throw new IllegalStateException(
