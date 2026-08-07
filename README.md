@@ -85,7 +85,9 @@ only add Hibernate Validator if you need `@ValidateBeanWith` integration.
 
 ## Quick start
 
-**1. Define validators as named constants:**
+Validators can be defined as lambdas or classes, and reused across multiple validation flows.
+
+**1. Define validators as named constants using Lambdas:**
 
 ```java
 static final Validator<Integer> LEGAL_AGE =
@@ -98,15 +100,29 @@ static final Validator<Double> MINIMUM_INCOME =
         ? ValidationResult.SUCCESS
         : ValidationResult.createError("Income below minimum threshold");
 ```
+Or like a separate class:
 
-**2. Define preconditions as lambdas:**
+```java
+public class LegalAgeValidator implements Validator<Integer> {
+    @Override
+    public ValidationResult validate(Integer age) {
+        return age >= 18
+            ? ValidationResult.SUCCESS
+            : ValidationResult.createError("Must be at least 18");
+    }
+}
+```
+
+
+    
+**2. Preconditions can be defined as lambdas:**
 
 ```java
 Precondition isSelfEmployed = () -> "SELF_EMPLOYED".equals(user.employmentType());
 Precondition isNewCustomer  = () -> !user.isExistingCustomer();
 ```
 
-**3. Compose and validate:**
+**3. Preconditions can be combined and validated:**
 
 ```java
 ValidationResult result = Vluent.create()
