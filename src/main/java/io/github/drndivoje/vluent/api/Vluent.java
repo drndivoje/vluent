@@ -1,10 +1,8 @@
-package io.github.drndivoje.vluent;
+package io.github.drndivoje.vluent.api;
 
-import io.github.drndivoje.vluent.model.Precondition;
-import io.github.drndivoje.vluent.model.ValidateWith;
-import io.github.drndivoje.vluent.model.ValidationConverter;
-import io.github.drndivoje.vluent.model.ValidationResult;
-import io.github.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.internal.AnnotationResolution;
+import io.github.drndivoje.vluent.internal.Chain;
+import io.github.drndivoje.vluent.internal.Step;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
@@ -168,11 +166,11 @@ public final class Vluent {
      * @param <T> type of the entity to validate
      * @return instance of {@link Vluent} with updated validation chain.
      */
-    public <T> PreconditionValidation thenForEach(Collection<T> values, Validator<T> validator) {
+    public <T> Vluent thenForEach(Collection<T> values, Validator<T> validator) {
       if (precondition.get()) {
         sourceValidator.forEach(values, validator);
       }
-      return this;
+      return sourceValidator;
     }
   }
 

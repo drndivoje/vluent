@@ -1,18 +1,20 @@
-package io.github.drndivoje.vluent;
+package io.github.drndivoje.vluent.internal;
 
 import static java.util.Collections.emptyList;
 
-import io.github.drndivoje.vluent.model.ValidateWith;
-import io.github.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.api.ValidateWith;
+import io.github.drndivoje.vluent.api.Validator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-class AnnotationResolution {
+public final class AnnotationResolution {
 
-  static <T> List<Validator<T>> resolveValidateWithAnnotation(Field field) {
+  private AnnotationResolution() {}
+
+  public static <T> List<Validator<T>> resolveValidateWithAnnotation(Field field) {
 
     ValidateWith validateWithAnnotation = field.getAnnotation(ValidateWith.class);
     if (validateWithAnnotation == null) {

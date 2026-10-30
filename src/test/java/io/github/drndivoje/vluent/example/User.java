@@ -1,6 +1,6 @@
 package io.github.drndivoje.vluent.example;
 
-import io.github.drndivoje.vluent.model.ValidateWith;
+import io.github.drndivoje.vluent.api.ValidateWith;
 import java.time.LocalDate;
 
 public record User(

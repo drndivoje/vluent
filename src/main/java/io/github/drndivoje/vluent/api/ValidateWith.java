@@ -1,4 +1,4 @@
-package io.github.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,14 +1,10 @@
-package io.github.drndivoje.vluent;
+package io.github.drndivoje.vluent.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.drndivoje.vluent.example.EqualStringValidator;
 import io.github.drndivoje.vluent.example.OlderThen18Validator;
 import io.github.drndivoje.vluent.example.User;
-import io.github.drndivoje.vluent.model.Precondition;
-import io.github.drndivoje.vluent.model.ValidateWith;
-import io.github.drndivoje.vluent.model.ValidationResult;
-import io.github.drndivoje.vluent.model.Validator;
 import java.time.LocalDate;
 import java.util.Arrays;
 import org.testng.annotations.Test;

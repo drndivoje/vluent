@@ -1,6 +1,6 @@
-package io.github.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.api;
 
-import io.github.drndivoje.vluent.beanvalidation.VluentJakartaBeanValidator;
+import io.github.drndivoje.vluent.internal.beanvalidation.VluentJakartaBeanValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.Documented;

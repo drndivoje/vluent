@@ -1,4 +1,4 @@
-package io.github.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.api;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,12 +11,12 @@ public final class ValidationResult {
 
   private final List<String> invalidationMessages;
 
-  ValidationResult() {
+  private ValidationResult() {
     this.invalidationMessages = new LinkedList<>();
   }
 
   /** The successful validation result */
-  public static ValidationResult SUCCESS = new ValidationResult();
+  public static final ValidationResult SUCCESS = new ValidationResult();
 
   private void add(String message) {
     invalidationMessages.add(message);

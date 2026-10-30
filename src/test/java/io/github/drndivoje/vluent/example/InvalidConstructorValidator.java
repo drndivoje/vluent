@@ -1,7 +1,7 @@
 package io.github.drndivoje.vluent.example;
 
-import io.github.drndivoje.vluent.model.ValidationResult;
-import io.github.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.api.ValidationResult;
+import io.github.drndivoje.vluent.api.Validator;
 
 public class InvalidConstructorValidator implements Validator<String> {
   public InvalidConstructorValidator() {

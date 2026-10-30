@@ -1,11 +1,11 @@
-package io.github.drndivoje.vluent;
+package io.github.drndivoje.vluent.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import io.github.drndivoje.vluent.api.Validator;
 import io.github.drndivoje.vluent.example.OlderThen18Validator;
 import io.github.drndivoje.vluent.example.User;
-import io.github.drndivoje.vluent.model.Validator;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;

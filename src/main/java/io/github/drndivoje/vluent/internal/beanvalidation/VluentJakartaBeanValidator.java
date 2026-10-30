@@ -1,9 +1,9 @@
-package io.github.drndivoje.vluent.beanvalidation;
+package io.github.drndivoje.vluent.internal.beanvalidation;
 
-import io.github.drndivoje.vluent.Util;
-import io.github.drndivoje.vluent.model.ValidateBeanWith;
-import io.github.drndivoje.vluent.model.ValidationResult;
-import io.github.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.api.ValidateBeanWith;
+import io.github.drndivoje.vluent.api.ValidationResult;
+import io.github.drndivoje.vluent.api.Validator;
+import io.github.drndivoje.vluent.internal.Util;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
@@ -33,8 +33,17 @@ public class VluentJakartaBeanValidator implements ConstraintValidator<ValidateB
 
   @Override
   public boolean isValid(Object value, ConstraintValidatorContext context) {
-    return validators.stream()
-        .map(validator -> validator.validate(value))
-        .allMatch(ValidationResult::isSuccess);
+    boolean isValid = true;
+    for (Validator<Object> validator : validators) {
+      ValidationResult validationResult = validator.validate(value);
+      if (!validationResult.isSuccess()) {
+        context
+            .buildConstraintViolationWithTemplate(
+                validationResult.getInvalidationMessages().toString())
+            .addConstraintViolation();
+        isValid = false;
+      }
+    }
+    return isValid;
   }
 }

@@ -1,6 +1,6 @@
-package io.github.drndivoje.vluent;
+package io.github.drndivoje.vluent.internal;
 
-import io.github.drndivoje.vluent.model.Validator;
+import io.github.drndivoje.vluent.api.Validator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 

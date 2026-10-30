@@ -1,4 +1,4 @@
-package io.github.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.api;
 
 /**
  * Interface to implement validation on single value
@@ -6,7 +6,6 @@ package io.github.drndivoje.vluent.model;
  * @param <T> the type of value to be validated
  */
 public interface Validator<T> {
-
   /**
    * It validates the value
    *

@@ -1,7 +1,7 @@
 package io.github.drndivoje.vluent.example;
 
-import io.github.drndivoje.vluent.model.ValidateBeanWith;
-import io.github.drndivoje.vluent.model.ValidationResult;
+import io.github.drndivoje.vluent.api.ValidateBeanWith;
+import io.github.drndivoje.vluent.api.ValidationResult;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -19,7 +19,7 @@ public class HibernateValidatorTest {
   public record TestObject(String firstName, LocalDate birthdate) {}
 
   public static class TestObjectValidator
-      implements io.github.drndivoje.vluent.model.Validator<TestObject> {
+      implements io.github.drndivoje.vluent.api.Validator<TestObject> {
 
     public TestObjectValidator() {}
 

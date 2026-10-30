@@ -1,6 +1,5 @@
-package io.github.drndivoje.vluent.model;
+package io.github.drndivoje.vluent.api;
 
-import io.github.drndivoje.vluent.Vluent;
 import java.util.function.Supplier;
 
 /**
