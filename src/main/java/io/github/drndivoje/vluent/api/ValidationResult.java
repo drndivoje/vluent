@@ -1,25 +1,20 @@
 package io.github.drndivoje.vluent.api;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * The result of validation returned by {@link Validator}. It contains the invalidation messages if
  * the case of failed validation.
  */
 public final class ValidationResult {
 
-  private final List<String> invalidationMessages;
+  private String errorMessage;
 
-  private ValidationResult() {
-    this.invalidationMessages = new LinkedList<>();
-  }
+  private ValidationResult() {}
 
   /** The successful validation result */
   public static final ValidationResult SUCCESS = new ValidationResult();
 
   private void add(String message) {
-    invalidationMessages.add(message);
+    this.errorMessage = message;
   }
 
   /**
@@ -40,15 +35,15 @@ public final class ValidationResult {
    * @return true if the validation is successful
    */
   public boolean isSuccess() {
-    return invalidationMessages.isEmpty();
+    return errorMessage == null;
   }
 
   /**
-   * It returns the invalidation messages
+   * It returns the error message
    *
-   * @return list of invalidation messages
+   * @return the error message, null if there is no error message
    */
-  public List<String> getInvalidationMessages() {
-    return invalidationMessages;
+  public String getErrorMessage() {
+    return errorMessage;
   }
 }

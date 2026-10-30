@@ -5,13 +5,16 @@
  * io.github.drndivoje.vluent.internal} is an implementation detail and may change without notice.
  *
  * <p>Jakarta Bean Validation is an optional dependency. It is only needed when {@link
- * io.github.drndivoje.vluent.api.ValidateBeanWith} is used.
+ * io.github.drndivoje.vluent.api.ValidateBeanWith} is used. Spring is an optional dependency as
+ * well. It is only needed when {@link io.github.drndivoje.vluent.api.VluentSpringValidator} is
+ * used.
  *
  * <p>{@link io.github.drndivoje.vluent.api.Vluent#on(Object)} reads annotated fields reflectively,
  * so modules that use it must open the packages of the validated classes to this module.
  */
 module io.github.drndivoje.vluent {
   requires static jakarta.validation;
+  requires static spring.context;
 
   exports io.github.drndivoje.vluent.api;
 

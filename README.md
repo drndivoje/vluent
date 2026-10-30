@@ -44,7 +44,7 @@ Every condition composes with `.and()`, `.or()`, `.not()`.
 Every validator tests in one line — no full object construction, no ordering concerns.
 
 Can be applied to the bean or field using annotations, or used standalone in any service layer. See here for [here](#how-to-apply-validators-to-a-bean).
-Also can be used with Spring Boot and Bean Validation (JSR 303) via `@ValidateBeanWith` annotation. See [here](#spring-boot) for more details.
+Also can be used with Spring Boot, either through Bean Validation (JSR 303) via the `@ValidateBeanWith` annotation or as a native Spring validator via `VluentSpringValidator`. See [here](#spring-boot) for more details.
 
 
 
@@ -81,8 +81,9 @@ Also can be used with Spring Boot and Bean Validation (JSR 303) via `@ValidateBe
 implementation 'io.github.drndivoje:vluent:0.0.4'
 ```
 
-Zero transitive dependencies. Bean Validation (Jakarta) support is optional —
-only add Hibernate Validator if you need `@ValidateBeanWith` integration.
+Zero transitive dependencies. Bean Validation (Jakarta) and Spring support are optional —
+only add Hibernate Validator if you need `@ValidateBeanWith` integration, and Spring
+(`spring-context`) if you use `VluentSpringValidator`. Spring Boot applications already have both.
 
 ---
 
@@ -193,21 +194,102 @@ well, and you can use them together to validate the bean.
 
 ## Spring Boot
 
-Works with `@Valid` out of the box via `@ValidateBeanWith`:
+Vluent integrates with Spring's `@Valid` in two ways. Both use the same Vluent `Validator<T>`,
+so a rule written once works in Spring and standalone — no duplication, no separate
+web-layer classes.
+
+|                                     | JSR-303: `@ValidateBeanWith`                | Spring: `VluentSpringValidator`              |
+|-------------------------------------|---------------------------------------------|----------------------------------------------|
+| How it is wired                     | Annotation on the bean                      | Registered in an `@InitBinder` method        |
+| Works without Spring                | ✅ (any Bean Validation provider)            | ❌                                            |
+| Validator can be a Spring bean      | ❌ (created via no-arg constructor)          | ✅ (you create or inject it)                  |
+| Error code of the reported error    | `ValidateBeanWith`                          | `Vluent`, or a custom code                   |
+| Error arguments                     | Annotation attributes                       | None                                         |
+
+In both cases a failure raises `MethodArgumentNotValidException` (HTTP 400), together with the
+errors of standard annotations such as `@NotBlank`, and the message returned by the Vluent
+validator becomes the error's default message.
+
+> All classes used below are in the `io.github.drndivoje.vluent.api` package (since `0.0.5`).
+
+### Option 1: Bean Validation (JSR 303) with `@ValidateBeanWith`
+
+Annotate the bean with the Vluent validator(s) and use `@Valid` as usual:
 
 ```java
+@ValidateBeanWith(AddressValidator.class)
+public record Address(
+    @NotBlank String street,
+    @NotBlank String city,
+    String zipCode,
+    @NotBlank String country) {}
 
-@ValidateBeanWith(UserValidator.class)
-public record User(@NotBlank String name, LocalDate birthDate, double salary) {}
-
-@PostMapping("/users")
-public ResponseEntity<User> create(@Valid @RequestBody User user) {
-  return ResponseEntity.ok(userService.save(user));
+@PostMapping("/users/{name}/address")
+public ResponseEntity<Address> addAddress(
+    @PathVariable String name, @RequestBody @Valid Address address) {
+  ...
 }
 ```
 
-The same validator works both with Bean Validation and standalone —
-no duplication, no separate web-layer classes.
+The validator class needs a public no-arg constructor. It can use the full fluent API:
+
+```java
+public class AddressValidator implements Validator<Address> {
+
+  @Override
+  public ValidationResult validate(Address address) {
+    Precondition isGermany = () -> "DE".equals(address.country());
+
+    return Vluent.create()
+        .on(address.zipCode(), ZIP_CODE_PRESENT)
+        .when(isGermany)
+        .then(address.zipCode(), GERMAN_ZIP_CODE)
+        .validate();
+  }
+}
+```
+
+### Option 2: Spring validator with `VluentSpringValidator`
+
+`VluentSpringValidator` adapts a Vluent `Validator<T>` to Spring's
+`org.springframework.validation.Validator`. Register it for the request body in an
+`@InitBinder` method. The bean itself needs no Vluent annotation:
+
+```java
+public record User(@NotBlank String name, LocalDate birthDate, double salary) {}
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+  @InitBinder("user")
+  void initBinder(WebDataBinder binder) {
+    binder.addValidators(new VluentSpringValidator<>(User.class, new UserValidator()));
+  }
+
+  @PostMapping
+  public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
+    ...
+  }
+}
+```
+
+`addValidators` keeps Spring's default Bean Validation, so `@NotBlank` and the Vluent validator
+both run. Failures are reported as an object error with the error code `Vluent`. Pass your own
+code to use it as a key in `messages.properties`:
+
+```java
+new VluentSpringValidator<>(User.class, new UserValidator(), "user.invalid");
+```
+
+Because you create the adapter yourself, the Vluent validator can be a Spring bean with injected
+dependencies (e.g. a repository to check that an email is unique).
+
+### Example application
+
+The [example](example) folder contains a Spring Boot application that uses both options:
+`/users` uses `VluentSpringValidator` and `/users/{name}/address` uses `@ValidateBeanWith`.
+See its [README](example/README.md) for how to run it and try it with `curl`.
 
 ---
 

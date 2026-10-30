@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 /**
  * This is a constraint annotation according to Java Bean Validation Specification. It is used as a
- * custom constraint to ake Vluent compatible with the JSR 303
+ * custom constraint to make Vluent compatible with the JSR 303
  */
 @Documented
 @Constraint(validatedBy = VluentJakartaBeanValidator.class)
@@ -23,7 +23,7 @@ public @interface ValidateBeanWith {
    *
    * @return the validation message
    */
-  String message() default "Vluent Validation failed";
+  String message() default "Validation failed";
 
   /**
    * A groups element that specifies the processing groups with which the constraint declaration is

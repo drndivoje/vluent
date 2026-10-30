@@ -37,9 +37,10 @@ public class VluentJakartaBeanValidator implements ConstraintValidator<ValidateB
     for (Validator<Object> validator : validators) {
       ValidationResult validationResult = validator.validate(value);
       if (!validationResult.isSuccess()) {
+        // report Vluent's own messages instead of the generic ValidateBeanWith message
+        context.disableDefaultConstraintViolation();
         context
-            .buildConstraintViolationWithTemplate(
-                validationResult.getInvalidationMessages().toString())
+            .buildConstraintViolationWithTemplate(validationResult.getErrorMessage())
             .addConstraintViolation();
         isValid = false;
       }

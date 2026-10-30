@@ -1,6 +1,7 @@
 package rocks.drnd.vluent_example;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,10 @@ public class UserService {
     public User createUser(User user) {
         users.add(user);
         return user;
+    }
+
+    public Optional<User> findByName(String name) {
+        return users.stream().filter(user -> user.name().equals(name)).findFirst();
     }
 
     public List<User> getUsers() {
