@@ -50,17 +50,7 @@ Also can be used with Spring Boot, either through Bean Validation (JSR 303) via 
 
 ---
 
-## Why Vluent
 
-|                                 | if/else | Bean Validation | Vluent |
-|---------------------------------|---------|-----------------|--------|
-| Test a single rule in isolation | ❌       | ❌               | ✅      |
-| Reuse a rule in two validators  | ❌       | ⚠️              | ✅      |
-| Conditional cross-field rules   | ❌       | ❌               | ✅      |
-| Compose conditions              | ❌       | ❌               | ✅      |
-| Zero framework coupling         | ✅       | ❌               | ✅      |
-
----
 
 ## Installation
 

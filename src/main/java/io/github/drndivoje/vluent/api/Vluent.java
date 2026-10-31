@@ -111,12 +111,16 @@ public final class Vluent {
    * @return the result of validation
    */
   public ValidationResult validate() {
-
-    return chain.stream()
-        .map(Step::execute)
-        .filter(validationResult -> !validationResult.isSuccess())
-        .findFirst()
-        .orElse(ValidationResult.SUCCESS);
+    List<String> errors =
+        chain.stream()
+            .map(Step::execute)
+            .filter(validationResult -> !validationResult.isSuccess())
+            .flatMap(validationResult -> validationResult.getErrors().stream())
+            .toList();
+    if (errors.isEmpty()) {
+      return ValidationResult.SUCCESS;
+    }
+    return ValidationResult.createError(errors);
   }
 
   /**

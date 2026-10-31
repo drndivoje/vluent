@@ -31,7 +31,7 @@ public class VluentTest {
             .then("AString", new EqualStringValidator("aSrtring"))
             .validate();
     assertThat(validationResult1.isSuccess()).isFalse();
-    assertThat(validationResult1.getErrorMessage()).isEqualTo("AString!=aSrtring");
+    assertThat(validationResult1.getErrors()).containsExactly("AString!=aSrtring");
   }
 
   @Test
@@ -60,8 +60,8 @@ public class VluentTest {
             .then(user.salary(), salaryValidator.invert())
             .validate();
     assertThat(validationResult2.isSuccess()).isFalse();
-    assertThat(validationResult2.getErrorMessage())
-        .isEqualTo("Inverted validation failed for value: 2303.3");
+    assertThat(validationResult2.getErrors())
+        .containsExactly("Inverted validation failed for value: 2303.3");
   }
 
   @Test
@@ -109,7 +109,7 @@ public class VluentTest {
         Vluent.create()
             .forEach(Arrays.asList("one", "one", "1"), new EqualStringValidator("one"))
             .validate();
-    assertThat(booleanResult.getErrorMessage()).isEqualTo("1!=one");
+    assertThat(booleanResult.getErrors()).containsExactly("1!=one");
   }
 
   @Test

@@ -55,7 +55,9 @@ public final class VluentSpringValidator<T> implements org.springframework.valid
   public void validate(Object target, Errors errors) {
     ValidationResult result = validator.validate(type.cast(target));
     if (!result.isSuccess()) {
-      errors.reject(errorCode, result.getErrorMessage());
+      for (String error : result.getErrors()) {
+        errors.reject(errorCode, error);
+      }
     }
   }
 }
