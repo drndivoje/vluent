@@ -6,6 +6,7 @@ import io.github.drndivoje.vluent.internal.Step;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -124,15 +125,14 @@ public final class Vluent {
   }
 
   /**
-   * It validates the chain and converts the result to the desired type using {@link
-   * ValidationConverter}
+   * It validates the chain and converts the result to the desired type
    *
    * @param validationResultConverter the converter
    * @param <T> the type of the result
    * @return the converted result
    */
-  public <T> T validateAndConvert(ValidationConverter<T> validationResultConverter) {
-    return validationResultConverter.convert(this.validate());
+  public <T> T validateAndConvert(Function<ValidationResult, T> validationResultConverter) {
+    return validationResultConverter.apply(this.validate());
   }
 
   /** The class to define precondition for validation */
