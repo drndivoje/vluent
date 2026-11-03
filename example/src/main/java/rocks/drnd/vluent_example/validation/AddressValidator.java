@@ -1,9 +1,10 @@
-package rocks.drnd.vluent_example;
+package rocks.drnd.vluent_example.validation;
 
 import io.github.drndivoje.vluent.api.Precondition;
 import io.github.drndivoje.vluent.api.ValidationResult;
 import io.github.drndivoje.vluent.api.Validator;
 import io.github.drndivoje.vluent.api.Vluent;
+import rocks.drnd.vluent_example.dto.Address;
 
 public class AddressValidator implements Validator<Address> {
 

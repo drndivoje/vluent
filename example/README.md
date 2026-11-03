@@ -68,7 +68,7 @@ Create a valid user: **201 Created**
 ```bash
 curl -i -X POST localhost:8080/users \
   -H 'Content-Type: application/json' \
-  -d '{"name":"Ivan","birth_date":"1990-01-01","salary":50000}'
+  -d '{"firstName":"Max", "lastName": "Musterman", "birthDate":"1990-01-01"}'
 ```
 
 User younger than 18: **400 Bad Request**
@@ -76,7 +76,7 @@ User younger than 18: **400 Bad Request**
 ```bash
 curl -i -X POST localhost:8080/users \
   -H 'Content-Type: application/json' \
-  -d '{"name":"Kid","birth_date":"2020-01-01","salary":0}'
+  -d '{"firstName":"Kid","lastName":"Musterman","birthDate":"2020-01-01"}'
 ```
 
 Logged error:
@@ -91,7 +91,7 @@ from `UserValidator`
 ```bash
 curl -i -X POST localhost:8080/users \
   -H 'Content-Type: application/json' \
-  -d '{"name":"","birth_date":"2020-01-01","salary":0}'
+  -d '{"firstName":"","lastName":"Musterman","birthDate":"2020-01-01"}'
 ```
 
 List all users: **200 OK**
@@ -102,12 +102,12 @@ curl -i localhost:8080/users
 
 ### Addresses (JSR 303)
 
-The user must exist, so create `Ivan` first (see above).
+The user must exist, so create the user first (see above) and use the id of the user in the URL.
 
 Valid German address: **201 Created**
 
 ```bash
-curl -i -X POST localhost:8080/users/Ivan/address \
+curl -i -X POST localhost:8080/users/{user_id}/address \
   -H 'Content-Type: application/json' \
   -d '{"street":"Main 1","city":"Berlin","zip_code":"10115","country":"DE"}'
 ```
@@ -115,7 +115,7 @@ curl -i -X POST localhost:8080/users/Ivan/address \
 German address with an invalid zip code: **400 Bad Request**
 
 ```bash
-curl -i -X POST localhost:8080/users/Ivan/address \
+curl -i -X POST localhost:8080/users/{user_id}/address \
   -H 'Content-Type: application/json' \
   -d '{"street":"Main 1","city":"Berlin","zip_code":"123","country":"DE"}'
 ```
@@ -126,27 +126,12 @@ Logged error:
 [Error in object 'address': codes [ValidateBeanWith.address,ValidateBeanWith]; ...; default message [German zip code must have 5 digits]]
 ```
 
-Short zip code outside Germany, so the German rule does not apply: **201 Created**
-
-```bash
-curl -i -X POST localhost:8080/users/Ivan/address \
-  -H 'Content-Type: application/json' \
-  -d '{"street":"Knez 1","city":"Beograd","zip_code":"110","country":"RS"}'
-```
-
 Missing zip code and blank city: **400 Bad Request** with 2 errors, one from `AddressValidator`
 and one from `@NotBlank`
 
 ```bash
-curl -i -X POST localhost:8080/users/Ivan/address \
+curl -i -X POST localhost:8080/users/{user_id}/address \
   -H 'Content-Type: application/json' \
-  -d '{"street":"Main 1","city":"","country":"RS"}'
+  -d '{"street":"Main 1","city":"","country":"DE"}'
 ```
 
-Address for a user that does not exist: **404 Not Found**
-
-```bash
-curl -i -X POST localhost:8080/users/Nobody/address \
-  -H 'Content-Type: application/json' \
-  -d '{"street":"Main 1","city":"Berlin","zip_code":"10115","country":"DE"}'
-```

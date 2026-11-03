@@ -21,7 +21,11 @@ public class Step<T> {
   }
 
   public ValidationResult execute() {
-    return validator.validate(supplier.get());
+    try {
+      return validator.validate(supplier.get());
+    } catch (Exception e) {
+      return ValidationResult.createError(e.getMessage());
+    }
   }
 
   record StepValidationResult(ValidationResult validationResult) {}
