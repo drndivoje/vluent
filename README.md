@@ -61,14 +61,14 @@ Also can be used with Spring Boot, either through Bean Validation (JSR 303) via 
 <dependency>
   <groupId>io.github.drndivoje</groupId>
   <artifactId>vluent</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
 </dependency>
 ```
 
 **Gradle:**
 
 ```groovy
-implementation 'io.github.drndivoje:vluent:0.0.4'
+implementation 'io.github.drndivoje:vluent:0.0.5'
 ```
 
 Zero transitive dependencies. Bean Validation (Jakarta) and Spring support are optional —
