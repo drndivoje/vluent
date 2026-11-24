@@ -24,7 +24,7 @@ public class AddressValidator implements Validator<Address> {
   public ValidationResult validate(Address address) {
     Precondition isGermany = () -> "DE".equals(address.country());
 
-    return Vluent.create()
+    return Vluent.createValidation()
         .on(address.zipCode(), ZIP_CODE_PRESENT)
         .when(isGermany)
         .then(address.zipCode(), GERMAN_ZIP_CODE)

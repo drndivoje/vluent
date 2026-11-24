@@ -22,26 +22,12 @@ public final class Vluent {
   }
 
   /**
-   * Create a new instance of {@link Vluent}
+   * Create a new instance of {@link ChainedValidator}
    *
-   * @return the instance of {@link Vluent}
+   * @return the instance of {@link ChainedValidator}
    */
-  public static Vluent create() {
-    return new Vluent();
-  }
-
-  /**
-   * Apply a validator to entity of type T. This method does not execute validation. It adds the
-   * validator to internal validation chain.
-   *
-   * @param toValidate entity to validate
-   * @param validator an instance of {@link Validator}
-   * @param <T> type of the entity to validate
-   * @return the instance of {@link Vluent} with updated validation chain.
-   */
-  public <T> Vluent on(T toValidate, Validator<T> validator) {
-    chain.add(toValidate, validator);
-    return this;
+  public static ChainedValidator createValidation() {
+    return new ChainedValidator();
   }
 
   /**
@@ -51,43 +37,19 @@ public final class Vluent {
    *
    * @param toValidate entity to validate
    * @param <T> type of the entity to validate
-   * @return the instance of {@link Vluent} with updated validation chain.
+   * @return the instance of {@link ChainedValidator} with updated validation chain.
    */
-  public <T> Vluent on(T toValidate) {
+  public static <T> ChainedValidator scan(T toValidate) {
+    ChainedValidator chainedValidator = new ChainedValidator();
     Field[] declaredFields = toValidate.getClass().getDeclaredFields();
     for (Field field : declaredFields) {
       List<Validator<T>> validators = AnnotationResolution.resolveValidateWithAnnotation(field);
       if (!validators.isEmpty()) {
         T fieldValue = getFieldValue(field, toValidate);
-        chain.addAll(fieldValue, validators);
+        chainedValidator.addValidatorsToValue(fieldValue, validators);
       }
     }
-    return this;
-  }
-
-  /**
-   * Apply a validator to value provided by {@param valueSupplier}. This method does not execute
-   * validation. It adds the validator to internal validation chain.
-   *
-   * @param valueSupplier the supplier of the value to validate
-   * @param validator an instance of {@link Validator}
-   * @param <T> the type of the value to validate
-   * @return the instance of {@link Vluent} with updated validation chain.
-   */
-  public <T> Vluent on(Supplier<T> valueSupplier, Validator<T> validator) {
-    chain.add(valueSupplier, validator);
-    return this;
-  }
-
-  /**
-   * Apply the precondition to the validation chain. If the precondition is met, the validation is
-   * executed.
-   *
-   * @param precondition the precondition
-   * @return the instance of {@link PreconditionValidation}
-   */
-  public PreconditionValidation when(Precondition precondition) {
-    return new PreconditionValidation(precondition, this);
+    return chainedValidator;
   }
 
   /**
@@ -124,24 +86,13 @@ public final class Vluent {
     return ValidationResult.createError(errors);
   }
 
-  /**
-   * It validates the chain and converts the result to the desired type
-   *
-   * @param validationResultConverter the converter
-   * @param <T> the type of the result
-   * @return the converted result
-   */
-  public <T> T validateAndConvert(Function<ValidationResult, T> validationResultConverter) {
-    return validationResultConverter.apply(this.validate());
-  }
-
   /** The class to define precondition for validation */
   public static final class PreconditionValidation {
 
     private final Precondition precondition;
-    private final Vluent sourceValidator;
+    private final ChainedValidator sourceValidator;
 
-    private PreconditionValidation(Precondition precondition, Vluent sourceValidator) {
+    private PreconditionValidation(Precondition precondition, ChainedValidator sourceValidator) {
       this.precondition = precondition;
       this.sourceValidator = sourceValidator;
     }
@@ -153,9 +104,9 @@ public final class Vluent {
      * @param toValidate entity to validate
      * @param validator an instance of {@link Validator}
      * @param <T> type of the entity to validate
-     * @return instance of {@link Vluent} with updated validation chain.
+     * @return instance of {@link ChainedValidator} with updated validation chain.
      */
-    public <T> Vluent then(T toValidate, Validator<T> validator) {
+    public <T> ChainedValidator then(T toValidate, Validator<T> validator) {
       if (precondition.get()) {
         sourceValidator.on(toValidate, validator);
       }
@@ -170,18 +121,128 @@ public final class Vluent {
      * @param <T> type of the entity to validate
      * @return instance of {@link Vluent} with updated validation chain.
      */
-    public <T> Vluent thenForEach(Collection<T> values, Validator<T> validator) {
+    public <T> ChainedValidator thenForEach(Collection<T> values, Validator<T> validator) {
       if (precondition.get()) {
-        sourceValidator.forEach(values, validator);
+        sourceValidator.applyValidatorToEach(values, validator);
       }
       return sourceValidator;
     }
   }
 
-  private static <T> T getFieldValue(Field field, Object root) {
+  /** A class to build a chain of validators and execute them. */
+  public static class ChainedValidator {
+    private final Chain chain;
+
+    private ChainedValidator() {
+      this.chain = new Chain();
+    }
+
+    private <T> void addValidator(T value, Validator<T> validator) {
+      chain.add(value, validator);
+    }
+
+    /**
+     * Add multiple validators to a single field value.
+     *
+     * @param fieldValue the value to validate
+     * @param validators the list of validators to apply
+     * @param <T> the type of the value to validate
+     */
+    public <T> void addValidatorsToValue(T fieldValue, List<Validator<T>> validators) {
+      for (Validator<T> validator : validators) {
+        this.addValidator(fieldValue, validator);
+      }
+    }
+
+    /**
+     * Apply the precondition to the validation chain. If the precondition is met, the validation is
+     * executed.
+     *
+     * @param precondition the precondition
+     * @return the instance of {@link PreconditionValidation}
+     */
+    public PreconditionValidation when(Precondition precondition) {
+      return new PreconditionValidation(precondition, this);
+    }
+
+    /**
+     * It validates the chain and returns the result
+     *
+     * @return the result of validation
+     */
+    public ValidationResult validate() {
+      List<String> errors =
+          chain.stream()
+              .map(Step::execute)
+              .filter(validationResult -> !validationResult.isSuccess())
+              .flatMap(validationResult -> validationResult.getErrors().stream())
+              .toList();
+      if (errors.isEmpty()) {
+        return ValidationResult.SUCCESS;
+      }
+      return ValidationResult.createError(errors);
+    }
+
+    /**
+     * Apply a validator to a value. This method does not execute validation. It adds the validator
+     * to internal validation chain.
+     *
+     * @param value the value to validate
+     * @param validator an instance of {@link Validator}
+     * @return the instance of {@link ChainedValidator} with updated validation chain.
+     * @param <T> the type of the value to validate
+     */
+    public <T> ChainedValidator on(T value, Validator<T> validator) {
+      chain.add(value, validator);
+      return this;
+    }
+
+    /**
+     * Apply a validator to value provided by {@param valueSupplier}. This method does not execute
+     * validation. It adds the validator to internal validation chain.
+     *
+     * @param valueSupplier the supplier of the value to validate
+     * @param validator an instance of {@link Validator}
+     * @param <T> the type of the value to validate
+     * @return the instance of {@link ChainedValidator} with updated validation chain.
+     */
+    public <T> ChainedValidator on(Supplier<T> valueSupplier, Validator<T> validator) {
+      chain.add(valueSupplier, validator);
+      return this;
+    }
+
+    /**
+     * Apply a validator to each value in the collection. This method does not execute validation.
+     * It adds the validator to internal validation chain.
+     *
+     * @param values the collection of values to validate
+     * @param validator an instance of {@link Validator}
+     * @param <T> the type of the values to validate
+     * @return the instance of {@link ChainedValidator} with updated validation chain.
+     */
+    public <T> ChainedValidator applyValidatorToEach(Collection<T> values, Validator<T> validator) {
+      for (T value : values) {
+        this.addValidator(value, validator);
+      }
+      return this;
+    }
+
+    /**
+     * It validates the chain and converts the result to the desired type
+     *
+     * @param validationResultConverter the converter
+     * @param <T> the type of the result
+     * @return the converted result
+     */
+    public <T> T validateAndConvert(Function<ValidationResult, T> validationResultConverter) {
+      return validationResultConverter.apply(this.validate());
+    }
+  }
+
+  private static <R> R getFieldValue(Field field, Object root) {
     field.setAccessible(true);
     try {
-      return (T) field.get(root);
+      return (R) field.get(root);
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }

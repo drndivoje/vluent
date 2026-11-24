@@ -12,21 +12,27 @@ import org.testng.annotations.Test;
 public class VluentTest {
 
   @Test
+  public void shouldEmptyValidationPass() {
+    ValidationResult validationResult = Vluent.createValidation().validate();
+    assertThat(validationResult.isSuccess()).isTrue();
+  }
+
+  @Test
   public void shouldCreateVluentInstance() {
-    assertThat(Vluent.create()).isNotNull();
+    assertThat(Vluent.createValidation()).isNotNull();
   }
 
   @Test
   public void shouldExecuteSimpleValidation() {
     ValidationResult validationResult =
-        Vluent.create().on(true, value -> ValidationResult.SUCCESS).validate();
+        Vluent.createValidation().on(true, value -> ValidationResult.SUCCESS).validate();
     assertThat(validationResult.isSuccess()).isTrue();
   }
 
   @Test
   public void shouldExecuteValidationWithPrecondition() {
     ValidationResult validationResult1 =
-        Vluent.create()
+        Vluent.createValidation()
             .when(() -> true)
             .then("AString", new EqualStringValidator("aSrtring"))
             .validate();
@@ -48,14 +54,14 @@ public class VluentTest {
           return ValidationResult.createError("not enough money");
         };
     ValidationResult validationResult =
-        Vluent.create()
+        Vluent.createValidation()
             .when(agePrecondition.and(namePrecondition))
             .then(user.salary(), salaryValidator)
             .validate();
     assertThat(validationResult.isSuccess()).isTrue();
     // validate that only users born after 1970 or named Bob must not have salary greater then 2000
     ValidationResult validationResult2 =
-        Vluent.create()
+        Vluent.createValidation()
             .when(agePrecondition.not().or(namePrecondition))
             .then(user.salary(), salaryValidator.invert())
             .validate();
@@ -67,7 +73,7 @@ public class VluentTest {
   @Test
   public void shouldNotExecuteValidationWithPrecondition() {
     ValidationResult validationResult1 =
-        Vluent.create()
+        Vluent.createValidation()
             .when(() -> false)
             .then("AString", new EqualStringValidator("aSrtring"))
             .validate();
@@ -78,7 +84,7 @@ public class VluentTest {
   public void shouldValidateSimpleValidationChain() {
     User user = new User("Bob", LocalDate.of(1960, 3, 3), 2303.3, "Street");
     ValidationResult validationResult =
-        Vluent.create()
+        Vluent.createValidation()
             .on(user.name(), new EqualStringValidator("Bob"))
             .on(user.birthday(), new OlderThen18Validator())
             .on(
@@ -97,7 +103,7 @@ public class VluentTest {
   @Test
   public void shouldValidateAndConvert() {
     boolean booleanResult =
-        Vluent.create()
+        Vluent.createValidation()
             .on("AString", new EqualStringValidator("aSrtring"))
             .validateAndConvert(ValidationResult::isSuccess);
     assertThat(booleanResult).isFalse();
@@ -106,8 +112,8 @@ public class VluentTest {
   @Test
   public void shouldValidateCollectionOfValues() {
     ValidationResult booleanResult =
-        Vluent.create()
-            .forEach(Arrays.asList("one", "one", "1"), new EqualStringValidator("one"))
+        Vluent.createValidation()
+            .applyValidatorToEach(Arrays.asList("one", "one", "1"), new EqualStringValidator("one"))
             .validate();
     assertThat(booleanResult.getErrors()).containsExactly("1!=one");
   }
@@ -116,7 +122,7 @@ public class VluentTest {
   public void shouldValidateAnnotatedField() {
     ValidUser user = new ValidUser("Bob", LocalDate.of(1960, 3, 3));
 
-    ValidationResult validationResult = Vluent.create().on(user).validate();
+    ValidationResult validationResult = Vluent.scan(user).validate();
     assertThat(validationResult.isSuccess()).isTrue();
   }
 
